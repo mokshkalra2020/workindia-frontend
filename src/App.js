@@ -1,23 +1,77 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import Card from './Card.js';
+
 
 function App() {
+  const [data, setData] = useState({ applied: [], accepted: [], rejected: [] });
+
+  useEffect(() => {
+    fetch('https://run.mocky.io/v3/ae511409-8c0e-40ed-9336-aebcb602823d')
+      .then((response) => response.json())
+      .then((responseData) => {
+        const categorizedData = {
+          applied: [],
+          accepted: [],
+          rejected: [],
+        };
+
+        responseData.data.forEach((candidate) => {
+          const { status } = candidate;
+          categorizedData[status.toLowerCase()].push(candidate);
+        });
+
+        setData(categorizedData);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="columns">
+        <div className="column">
+          <h2>Applied</h2>
+          {data.applied.map((candidate) => (
+            <Card
+              key={candidate.id}
+              title={candidate.name}
+              subheadings={[
+                `Last Updated: ${candidate.last_updated_at}`,
+                `Location: ${candidate.location}`,
+                `Gender: ${candidate.gender}`,
+              ]}
+            />
+          ))}
+        </div>
+        <div className="column">
+          <h2>Accepted</h2>
+          {data.accepted.map((candidate) => (
+            <Card
+              key={candidate.id}
+              title={candidate.name}
+              subheadings={[
+                `Last Updated: ${candidate.last_updated_at}`,
+                `Location: ${candidate.location}`,
+                `Gender: ${candidate.gender}`,
+              ]}
+            />
+          ))}
+        </div>
+        <div className="column">
+          <h2>Rejected</h2>
+          {data.rejected.map((candidate) => (
+            <Card
+              key={candidate.id}
+              title={candidate.name}
+              subheadings={[
+                `Last Updated: ${candidate.last_updated_at}`,
+                `Location: ${candidate.location}`,
+                `Gender: ${candidate.gender}`,
+              ]}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
