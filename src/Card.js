@@ -1,7 +1,7 @@
 import React from 'react';
 import './Card.css';
 
-const Card = ({ title, subheadings }) => {
+const card = ({ title, subheadings }) => {
   return (
     <div className="card">
       <h3>{title}</h3>
@@ -16,4 +16,4 @@ const Card = ({ title, subheadings }) => {
   );
 };
 
-export default Card;
+export default card;
